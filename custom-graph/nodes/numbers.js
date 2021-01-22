@@ -3,7 +3,7 @@ class NumComponent extends SourceComponent {
     super('Number');
   }
 
-  builder(node) {
+  onBuild(node) {
     var ctrl = new NumberControl(this.editor, "num", false);
     let out = new Rete.Output('num', 'Decimal Value', decimalSocket);
     node.addControl(ctrl);
@@ -11,6 +11,7 @@ class NumComponent extends SourceComponent {
   }
 
   onGenerate(node, outputs) {
+//      if(node.data.num>7) return;//disabled-output testing
     console.log("decimal",node,node.data.num)
     outputs['num'] = node.data.num;
   }
@@ -20,7 +21,7 @@ class Num2Component extends SourceComponent {
     super('2Number');
   }
 
-  builder(node) {
+  onBuild(node) {
     var ctrl = new NumberControl(this.editor, "num", false);
     let out = new Rete.Output('num', 'Decimal Value', decimalSocket);
     node.addControl(ctrl);
@@ -39,7 +40,7 @@ class Decimal2Bool_Component extends FilterComponent{
     this.registerInputs('num');
   }
 
-  builder(node) {
+  onBuild(node) {
     node.addInput(new Rete.Input('num', 'Decimal Value', decimalSocket));
     node.addOutput(new Rete.Output('bit0', 'Bit 0', booleanSocket));
     node.addOutput(new Rete.Output('bit1', 'Bit 1', booleanSocket));
@@ -64,7 +65,7 @@ class Bool2Decimal_Component extends FilterComponent{
     this.registerInputs('bit0','bit1','bit2','bit3','bit4','bit5','bit6','bit7');
   }
 
-  builder(node) {
+  onBuild(node) {
     node.addOutput(new Rete.Output('num', 'Decimal Value', decimalSocket));
     node.addInput(new Rete.Input('bit0', 'Bit 0', booleanSocket));
     node.addInput(new Rete.Input('bit1', 'Bit 1', booleanSocket));

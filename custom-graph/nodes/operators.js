@@ -5,7 +5,7 @@ class UnaryOperator extends FilterComponent{
     this.registerInputs('num1');
   }
 
-  builder(node) {
+  onBuild(node) {
     node.addInput(new Rete.Input('num1', this.socket.name, this.socket));
     node.addOutput(new Rete.Output('numOut', this.socket.name, this.socket));
   }
@@ -32,8 +32,7 @@ class BinaryOperator extends UnaryOperator{
     this.registerInputs('num1','num2');
   }
 
-  builder(node) {
-    super.builder(node);
+  onBuild(node) {
     node.addInput(new Rete.Input('num2', this.socket.name, this.socket));
   }
 

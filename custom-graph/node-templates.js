@@ -5,10 +5,23 @@ class AbstractComponent extends Rete.Component{
     this.uncategorizedName = name;
     this.categoryName = category;
     this.inputNames=[];
+    this.inputConnectionsRequired = false;
   }
   registerInputs(){
       this.inputNames = [...arguments];
       console.log(" registered inputs: ",this.inputNames)
+  }
+  
+  builder(node) {
+      node.inputConnectionsRequired = this.inputConnectionsRequired;
+      setNodeEnabled(node,false);
+      this.onBuild(node);
+      //var nodeDetail = this.editor.nodes.find(n => n.id === node.id);
+      //console.log("abstractnode nodedetal",node,nodeDetail);
+  }
+  
+  onBuild(node){
+      
   }
   
   reduceInput(input){//reduces all input arrays into at least a 1D array of inputs
@@ -28,22 +41,45 @@ class AbstractComponent extends Rete.Component{
   prepareInputs(inputs){
     for(var inputName of this.inputNames){
         //if(typeof inputs[inputName]!=="undefined" && inputs[inputName].length>0){
-            console.log(" reducing input "+inputName,inputs[inputName]);
+            //console.log(" reducing input "+inputName,inputs[inputName]);
             inputs[inputName] = this.reduceInput(inputs[inputName]);
-            console.log(" reduced input "+inputName,inputs[inputName]);
+            //console.log(" reduced input "+inputName,inputs[inputName]);
             inputs[inputName] = this.wrapInput(inputs[inputName]);
-            console.log(" wrapped input "+inputName,inputs[inputName]);
+            //console.log(" wrapped input "+inputName,inputs[inputName]);
             inputs[inputName] = inputs[inputName].filter(function( element ) { return element !== undefined; });
-            console.log(" trimmed input "+inputName,inputs[inputName]);
+            //console.log(" trimmed input "+inputName,inputs[inputName]);
         //}
     }
     return inputs;
   }
+  
+  hasAllInputConnections(node){
+      window.g_testn=node;
+      window.g_test=node.inputs;
+      
+      if(node.inputs instanceof Map){
+          for(var inputkey of node.inputs.keys()){
+            var input = node.inputs.get(inputkey);
+            if(input.connections.length<1) return false;
+          }
+      }else{
+        for(var inputkey of Object.keys(node.inputs)){
+           var input = node.inputs[inputkey];
+           if(input.connections.length<1) return false;
+        }
+      }
+      
+      
+
+      return true;
+  }
+  
 }
 
 class InputConditionalComponent extends AbstractComponent{
   constructor(name,category=null) {
     super(name,category);
+    this.inputConnectionsRequired=true;
   }
   
   areAnyInputsPresent(inputs){
@@ -57,10 +93,21 @@ class InputConditionalComponent extends AbstractComponent{
   }
   
   worker(node, inputs, outputs) {
-    console.log("conditional input worker - ",node,inputs)
+    if(!node.data.enabled){
+        console.log("disabled node - ",node,node.inputs);
+        return;
+    }
+    /*if(this.inputConnectionsRequired && !this.hasAllInputConnections(node)){
+        console.log("disconnected node - ",node,node.inputs);
+        return;
+    }*/ //superceded by the node.data.enabled check (connect/disconnect-ran)
+        
+    console.log("conditional input worker CHECK - ",node,inputs)
     if(inputs.length===0) return;
-    if(!this.areAnyInputsPresent(inputs)) return;
+    //if(!this.areAnyInputsPresent(inputs)) return;
     inputs = this.prepareInputs(inputs);//TODO: remove this and force all operations to support array-processing and collection of results. - this is so we can provide lists of inputs to an algo.
+    if(!this.areAnyInputsPresent(inputs)) return;
+    console.log("conditional input worker PROC- ",node,inputs)
     var ret = this.onInput(node,inputs,outputs);
     if(typeof ret!=="undefined") return ret;
  }
@@ -73,6 +120,11 @@ class SourceComponent extends AbstractComponent{
   constructor(name, category=null) {
     category = category===null? "Source" : category;
     super(name,category);
+  }
+  
+  builder(node) {
+      super.builder(node);
+      setNodeEnabled(node,true);
   }
   
   worker(node, inputs, outputs) {

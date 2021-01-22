@@ -1,14 +1,14 @@
-class ButtonComponent extends SourceComponent {
+class ButtonComponent extends SourceComponent {//TODO: fix to not always be on
   constructor() {
     super('Button');
   }
 
-  builder(node) {
+  onBuild(node) {
     var ctrl = new ButtonControl(this.editor, "pressed");
     
     node.addControl(ctrl);
       
-    let out = new Rete.Output('pressed', 'Pressed', booleanSocket);
+    let out = new Rete.Output('pressed', 'Pressed', actionSocket);
 
     node.addOutput(out);
   }
@@ -17,6 +17,26 @@ class ButtonComponent extends SourceComponent {
     outputs['pressed'] = 1;
   }
 }
+class SwitchComponent extends SourceComponent {//TODO: fix to not always be on
+  constructor() {
+    super('Switch');
+  }
+
+  onBuild(node) {
+    var ctrl = new SwitchControl(this.editor, "switched");
+    
+    node.addControl(ctrl);
+      
+    let out = new Rete.Output('switched', 'Switched', actionSocket);
+
+    node.addOutput(out);
+  }
+
+  worker(node, inputs, outputs) {
+    outputs['switched'] = 1;
+  }
+}
+
 
 class ConsoleComponent extends OutputComponent {
   constructor() {
@@ -24,8 +44,7 @@ class ConsoleComponent extends OutputComponent {
     this.registerInputs('msg');
   }
 
-  builder(node) {
-    
+  onBuild(node) {
     node.addInput(new Rete.Input('msg', 'Data', stringSocket));
   }
 
@@ -46,7 +65,7 @@ class TextOutComponent extends OutputComponent {
     this.registerInputs('msg');
   }
 
-  builder(node) {
+  onBuild(node) {
     var ctrl = new MessageControl(this.editor,"msg","0");
     node.addControl(ctrl);
     node.addInput(new Rete.Input('msg', 'Data', stringSocket));
@@ -56,7 +75,7 @@ class TextOutComponent extends OutputComponent {
     if(inputs.length===0) return;
     if(inputs.msg.length==0) return;
     var nodeDetail = this.editor.nodes.find(n => n.id === node.id);
-    console.log("textcomponent input",node.controls,inputs,nodeDetail)
+    console.log("textcomponent input",inputs,node,nodeDetail)
     
     var out = this.reduceInput(inputs.msg);
     
@@ -66,6 +85,7 @@ class TextOutComponent extends OutputComponent {
  }
 }
 
+components.push(new SwitchComponent);
 
 components.push(new ButtonComponent);
 components.push(new ConsoleComponent);

@@ -136,4 +136,13 @@ if(canUseStorage()){
 editor.fromJSON(data).then(() => {
     editor.view.resize();
     compile();
+    editor.nodes.forEach((node)=>{
+        updateNodeEnabled(node);
+    })
 });
+
+
+
+editor.nodes.forEach((node)=>{
+    updateNodeEnabled(node);
+})

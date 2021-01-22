@@ -35,7 +35,7 @@ var VueTextControl = {
   },
   methods: {
     change(e){
-      this.value = +e.target.value;
+      this.value = e.target.value;
       this.update();
     },
     update() {
@@ -73,6 +73,33 @@ var VueNumControl = {
   }
 }
 
+
+var VueSwitchControl = {
+  props: ['readonly', 'emitter', 'ikey', 'getData', 'putData'],
+  template: `<div><label for="radoff">Off</label><input :readonly="readonly" type="radio" id="radoff" name="drone" value="0" @input="change($event)" @dblclick.stop="" @pointerdown.stop="" @pointermove.stop="" checked>
+<label for="radon">On</label><input :readonly="readonly" type="radio" id="radon" name="drone" value="1" @input="change($event)" @dblclick.stop="" @pointerdown.stop="" @pointermove.stop=""></div>`,
+  data() {
+    return {
+      value: 0,
+    }
+  },
+  methods: {
+    change(e){
+      this.value = +e.target.value;
+      this.update();
+    },
+    update() {
+      if (this.ikey)
+        this.putData(this.ikey, this.value)
+      this.emitter.trigger('process');
+    }
+  },
+  mounted() {
+    this.value = this.getData(this.ikey);
+  }
+}
+
+
 class NumberControl extends Rete.Control {
 
   constructor(emitter, key, readonly) {
@@ -103,6 +130,18 @@ class ButtonControl extends Rete.Control {
   constructor(emitter, key, readonly) {
     super(key);
     this.component = VueButtonControl;
+    this.props = { emitter, ikey: key, readonly };
+  }
+
+  setValue(val) {
+    this.vueContext.value = val;
+  }
+}
+class SwitchControl extends Rete.Control {
+
+  constructor(emitter, key, readonly) {
+    super(key);
+    this.component = VueSwitchControl;
     this.props = { emitter, ikey: key, readonly };
   }
 

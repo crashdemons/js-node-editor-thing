@@ -86,3 +86,8 @@
     background-image: url('d.png') !important;
     background-size: contain !important;
 }
+
+.node.disabled{
+    filter: contrast(75%);
+    opacity:0.75;
+}
