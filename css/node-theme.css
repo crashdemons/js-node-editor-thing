@@ -30,11 +30,12 @@
     margin-right:0px !important;
     color:black !important;
 }
-.node .control input{
-background: rgb(103,103,103);
-background: linear-gradient(rgba(123,123,123,1) 0%, rgba(171,171,171,1) 100%);
-border-radius: 5px !important;
-border-color: rgba(0,0,0,0.75) !important;
+.node .control input, .context-menu input{
+    background: rgb(103,103,103);
+    background: linear-gradient(rgba(123,123,123,1) 0%, rgba(171,171,171,1) 100%) !important;
+    border-radius: 5px !important;
+    border-color: rgba(0,0,0,0.75) !important;
+    color: black !important;
 }
 
 .socket.data {
@@ -78,4 +79,10 @@ border-color: rgba(0,0,0,0.75) !important;
     background-color: rgba(70,70,70,1) !important;
         margin:0 !important;
     padding:5px !important;
+}
+
+
+.socket.decimal {
+    background-image: url('d.png') !important;
+    background-size: contain !important;
 }
