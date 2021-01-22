@@ -32,8 +32,9 @@ class SwitchComponent extends SourceComponent {//TODO: fix to not always be on
     node.addOutput(out);
   }
 
-  worker(node, inputs, outputs) {
-    outputs['switched'] = 1;
+  onGenerate(node, outputs) {
+    outputs['switched'] = node.data.switched;
+      console.log("switch output",outputs)
   }
 }
 

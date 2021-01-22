@@ -1,47 +1,43 @@
-class NumComponent extends SourceComponent {
+class Int2Bytes_Component extends FilterComponent{
   constructor() {
-    super('Number');
-  }
-
-  onBuild(node) {
-    var ctrl = new NumberControl(this.editor, "num", false);
-    let out = new Rete.Output('num', 'Decimal Value', decimalSocket);
-    node.addControl(ctrl);
-    node.addOutput(out);
-  }
-
-  onGenerate(node, outputs) {
-//      if(node.data.num>7) return;//disabled-output testing
-    console.log("decimal",node,node.data.num)
-    outputs['num'] = node.data.num;
-  }
-}
-class Num2Component extends SourceComponent {
-  constructor() {
-    super('2Number');
-  }
-
-  onBuild(node) {
-    var ctrl = new NumberControl(this.editor, "num", false);
-    let out = new Rete.Output('num', 'Decimal Value', decimalSocket);
-    node.addControl(ctrl);
-    node.addOutput(out);
-  }
-
-  onGenerate(node, outputs) {
-    console.log("2decimal",node,node.data.num)
-    outputs['num'] = [node.data.num,node.data.num];
-  }
-}
-
-class Decimal2Bool_Component extends FilterComponent{
-  constructor() {
-    super('Decimal-to-Boolean');
+    super('Int-to-Bytes');
     this.registerInputs('num');
   }
 
   onBuild(node) {
-    node.addInput(new Rete.Input('num', 'Decimal Value', decimalSocket));
+    node.addInput(new Rete.Input('num', 'Integer Value', integerSocket));
+    node.addOutput(new Rete.Output('byte0', 'Byte 0', byteSocket));
+    node.addOutput(new Rete.Output('byte1', 'Byte 1', byteSocket));
+    node.addOutput(new Rete.Output('byte2', 'Byte 2', byteSocket));
+    node.addOutput(new Rete.Output('byte3', 'Byte 3', byteSocket));
+  }
+
+  onInput(node, inputs, outputs) {
+    console.log("dec2bool",inputs);
+    var n = inputs.num;
+    var byteMask = 0xFF;
+    for(var i=0;i<4;i++){
+        var shift = (8*i);
+        var mask = byteMask<<shift;
+        var unshiftedValue = n & mask;
+        var value = unshiftedValue>>shift;
+        outputs["byte"+i]=value;
+        //outputs["byte"+i]= (n&(1<<i)) >> i;
+    }
+  }
+}
+
+
+//------------------------------------
+
+class Decimal2Bool_Component extends FilterComponent{
+  constructor() {
+    super('Byte-to-Bits');
+    this.registerInputs('num');
+  }
+
+  onBuild(node) {
+    node.addInput(new Rete.Input('num', 'Byte Value', byteSocket));
     node.addOutput(new Rete.Output('bit0', 'Bit 0', booleanSocket));
     node.addOutput(new Rete.Output('bit1', 'Bit 1', booleanSocket));
     node.addOutput(new Rete.Output('bit2', 'Bit 2', booleanSocket));
@@ -61,12 +57,12 @@ class Decimal2Bool_Component extends FilterComponent{
 
 class Bool2Decimal_Component extends FilterComponent{
   constructor() {
-    super('Boolean-to-Decimal');
+    super('Bits-to-Byte');
     this.registerInputs('bit0','bit1','bit2','bit3','bit4','bit5','bit6','bit7');
   }
 
   onBuild(node) {
-    node.addOutput(new Rete.Output('num', 'Decimal Value', decimalSocket));
+    node.addOutput(new Rete.Output('num', 'Byte Value', byteSocket));
     node.addInput(new Rete.Input('bit0', 'Bit 0', booleanSocket));
     node.addInput(new Rete.Input('bit1', 'Bit 1', booleanSocket));
     node.addInput(new Rete.Input('bit2', 'Bit 2', booleanSocket));
@@ -94,9 +90,6 @@ class Bool2Decimal_Component extends FilterComponent{
         return outputs;
     }
 }
-
-
-components.push(new NumComponent);
-components.push(new Num2Component);
+components.push(new Int2Bytes_Component);
 components.push(new Decimal2Bool_Component);
 components.push(new Bool2Decimal_Component);

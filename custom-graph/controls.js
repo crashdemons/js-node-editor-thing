@@ -51,7 +51,7 @@ var VueTextControl = {
 
 var VueNumControl = {
   props: ['readonly', 'emitter', 'ikey', 'getData', 'putData'],
-  template: '<input type="number" :readonly="readonly" :value="value" @input="change($event)" @dblclick.stop="" @pointerdown.stop="" @pointermove.stop=""/>',
+  template: '<input type="number" min="-2147483648" max="2147483647" :readonly="readonly" :value="value" @input="change($event)" @dblclick.stop="" @pointerdown.stop="" @pointermove.stop=""/>',
   data() {
     return {
       value: 0,
@@ -86,11 +86,14 @@ var VueSwitchControl = {
   methods: {
     change(e){
       this.value = +e.target.value;
+        console.log("switch change ",e.target.value,this.value,e)
       this.update();
     },
     update() {
-      if (this.ikey)
+      if (this.ikey){
+        console.log("switch setting ",this.ikey,this.value)
         this.putData(this.ikey, this.value)
+      }
       this.emitter.trigger('process');
     }
   },

@@ -3,7 +3,7 @@
 
 class NotDecComponent extends UnaryOperator{
     constructor(){
-        super(decimalSocket,"NOT (decimal)");
+        super(integerSocket,"NOT (decimal)");
     }
     operation(num1){
         console.log("NOT ",num1);
@@ -12,7 +12,7 @@ class NotDecComponent extends UnaryOperator{
 }
 class XorDecComponent extends BinaryOperator{
     constructor(){
-        super(decimalSocket,"XOR (decimal)");
+        super(integerSocket,"XOR (decimal)");
     }
     operation(num1,num2){
         return num1^num2;

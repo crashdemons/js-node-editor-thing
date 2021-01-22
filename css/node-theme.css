@@ -82,8 +82,16 @@
 }
 
 
-.socket.decimal {
-    background-image: url('d.png') !important;
+.socket.integer {
+    background-image: url('../img/integer.png') !important;
+    background-size: contain !important;
+}
+.socket.boolean {
+    background-image: url('../img/boolean.png') !important;
+    background-size: contain !important;
+}
+.socket.byte {
+    background-image: url('../img/byte.png') !important;
     background-size: contain !important;
 }
 

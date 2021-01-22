@@ -244,9 +244,9 @@ function setNodeEnabled(node, state=true){
     }
 }
 function updateNodeEnabled(node){
-    if(node.inputConnectionsRequired){
+    //if(node.inputConnectionsRequired){
         setNodeEnabled(node,node.data.enabled);
-    }
+    //}
 }
 async function updateNodeEnabledDelayed(node,delay=25){//this is a workaround - selecting/deselecting a node resets the classes, but it does it AFTER 'nodeselected' event...
     var nodeX = node;
@@ -277,6 +277,8 @@ editor.on('connectioncreate', (connectEvent)=>{
           if(missingConnections.length<=1){//we're adding a connection when we're missing 1 connection, so enable the node
               console.log("     enabling reconnected node")
               setNodeEnabled(connectEvent.input.node,true);
+          }else{
+              setNodeEnabled(connectEvent.input.node,false);
           }
           
       }

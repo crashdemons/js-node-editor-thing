@@ -116,6 +116,14 @@ class InputConditionalComponent extends AbstractComponent{
     
   }
 }
+
+function actionToBoolean(action){
+    if(action===0) return false;
+    if(action===1) return true;
+    return action?true:false;
+}
+
+
 class SourceComponent extends AbstractComponent{
   constructor(name, category=null) {
     category = category===null? "Source" : category;
@@ -128,6 +136,7 @@ class SourceComponent extends AbstractComponent{
   }
   
   worker(node, inputs, outputs) {
+    console.log("source",inputs,node)
     var ret = this.onGenerate(node,outputs);
     if(typeof ret!=="undefined") return ret;
   }
@@ -135,6 +144,35 @@ class SourceComponent extends AbstractComponent{
       
   }
 }
+
+
+class TogglableSourceComponent extends SourceComponent{
+  constructor(name, category=null) {
+    super(name,category);
+  }
+  
+  builder(node) {
+      super.builder(node);
+      setNodeEnabled(node,true);
+    node.addInput(new Rete.Input('toggle', 'Toggle', actionSocket));
+  }
+  
+  worker(node, inputs, outputs) {
+    console.log("sourceT",inputs,node)
+    if(inputs.toggle.length>0){
+        setNodeEnabled(node,actionToBoolean(inputs.toggle[0]));
+    }else{
+        setNodeEnabled(node,true);
+    }
+    if(!node.data.enabled) return;
+    return super.worker(node, inputs, outputs);
+  }
+  onGenerate(node, outputs){
+      
+  }
+}
+
+
 class FilterComponent extends InputConditionalComponent{
   constructor(name, category=null) {
     category = category===null? "Filter" : category;
