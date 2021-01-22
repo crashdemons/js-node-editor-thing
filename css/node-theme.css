@@ -1,0 +1,46 @@
+.node{
+    background-color: rgba(90,90,90,0.75) !important;
+    box-shadow: 0 4px 5px 5px rgba(0,0,0,0.5);
+}
+.node .title {
+    background-color: rgba(67,67,67,0.75) !important;
+    background-image: linear-gradient(rgba(90,90,90,0.75), rgba(73,73,73,0.75) 25%);
+    border-radius: 5px 5px 0 0;
+    color:black !important;
+}
+
+.node {
+    border-color: rgba(90,90,90,0.75) !important;
+}
+.node.selected {
+    border-color: rgba(215,151,90,0.75) !important;
+}
+
+.node .socket {
+    width:12px !important;
+    height:12px !important;
+    margin-right: -8px !important;
+    border-color: rgba(0,0,0,0.75) !important;
+}
+.input-title{
+    margin-left:10px !important;
+    color:black !important;
+}
+.output-title{
+    margin-right:0px !important;
+    color:black !important;
+}
+.node .control input{
+background: rgb(103,103,103);
+background: linear-gradient(rgba(123,123,123,1) 0%, rgba(171,171,171,1) 100%);
+border-radius: 5px !important;
+border-color: rgba(0,0,0,0.75) !important;
+}
+
+.socket.data {
+    background: rgb(143, 125, 224) !important;
+}
+
+.socket.action {
+    background: yellow !important;
+}
