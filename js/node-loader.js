@@ -140,9 +140,3 @@ editor.fromJSON(data).then(() => {
         updateNodeEnabled(node);
     })
 });
-
-
-
-editor.nodes.forEach((node)=>{
-    updateNodeEnabled(node);
-})
