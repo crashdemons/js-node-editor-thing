@@ -1,10 +1,9 @@
-class AbstractComponent  extends Rete.Component{
-    
-}
-
-class InputConditionalComponent extends Rete.Component{
-  constructor(name) {
-    super(name);
+class AbstractComponent extends Rete.Component{
+  constructor(name, category=null) {
+    category = category===null? "General" : category;
+    super(category+':\xA0'+name);
+    this.uncategorizedName = name;
+    this.categoryName = category;
     this.inputNames=[];
   }
   registerInputs(){
@@ -26,16 +25,6 @@ class InputConditionalComponent extends Rete.Component{
     if(!Array.isArray(input)) return [input];
     return input;
   }
-  
-  areAnyInputsPresent(inputs){
-    for(var inputName of this.inputNames){
-        if(typeof inputs[inputName]!=="undefined" && inputs[inputName].length>0){
-            return true;
-        }
-    }
-    console.log("no valid inputs:",inputs,this.inputNames)
-    return false;
-  }
   prepareInputs(inputs){
     for(var inputName of this.inputNames){
         //if(typeof inputs[inputName]!=="undefined" && inputs[inputName].length>0){
@@ -49,6 +38,22 @@ class InputConditionalComponent extends Rete.Component{
         //}
     }
     return inputs;
+  }
+}
+
+class InputConditionalComponent extends AbstractComponent{
+  constructor(name,category=null) {
+    super(name,category);
+  }
+  
+  areAnyInputsPresent(inputs){
+    for(var inputName of this.inputNames){
+        if(typeof inputs[inputName]!=="undefined" && inputs[inputName].length>0){
+            return true;
+        }
+    }
+    console.log("no valid inputs:",inputs,this.inputNames)
+    return false;
   }
   
   worker(node, inputs, outputs) {
@@ -64,10 +69,10 @@ class InputConditionalComponent extends Rete.Component{
     
   }
 }
-class SourceComponent extends Rete.Component{
+class SourceComponent extends AbstractComponent{
   constructor(name, category=null) {
     category = category===null? "Source" : category;
-    super(category+':\xA0'+name);
+    super(name,category);
   }
   
   worker(node, inputs, outputs) {
@@ -81,17 +86,19 @@ class SourceComponent extends Rete.Component{
 class FilterComponent extends InputConditionalComponent{
   constructor(name, category=null) {
     category = category===null? "Filter" : category;
-    super(category+':\xA0'+name);
+    super(name,category);
   }
 }
 class CollectedFilterComponent extends FilterComponent{
-    
+  constructor(name, category=null) {
+    super(name,category);
+  }
 }
 
 
 class OutputComponent extends InputConditionalComponent{
   constructor(name, category=null) {
     category = category===null? "Output" : category;
-    super(category+':\xA0'+name);
+    super(name,category);
   }
 }
