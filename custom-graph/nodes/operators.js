@@ -33,7 +33,9 @@ class BinaryOperator extends UnaryOperator{
   }
 
   onBuild(node) {
+    node.addInput(new Rete.Input('num1', this.socket.name, this.socket));
     node.addInput(new Rete.Input('num2', this.socket.name, this.socket));
+    node.addOutput(new Rete.Output('numOut', this.socket.name, this.socket));
   }
 
   onInput(node, inputs, outputs) {
