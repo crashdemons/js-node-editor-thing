@@ -11,7 +11,7 @@ editor.use(ConnectionPlugin.default);
 //editor.use(ContextMenuPlugin);
 editor.use(ContextMenuPlugin.default,{
     searchBar: true, // true by default
-    searchKeep: title => true, // leave item when searching, optional. For example, title => ['Refresh'].includes(title)
+    //searchKeep: title => true, // leave item when searching, optional. For example, title => ['Refresh'].includes(title)
     delay: 100,
     allocate(component) {
         return [component.categoryName];
@@ -24,7 +24,7 @@ editor.use(ContextMenuPlugin.default,{
         //'Click me'(){ console.log('Works!') }
     },
     nodeItems: {
-       // 'Click me'(){ console.log('Works for node!') },
+        //'Click me'(){ console.log('Works for node!') },
         //'Delete': false, // don't show Delete item
         //'Clone': false // or Clone item
     },
