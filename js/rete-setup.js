@@ -185,6 +185,14 @@ editor.use(ContextMenuPlugin.default,{
         }
     },
     nodeItems: {
+        'Get Endpoint Pseudocode'(e){
+            //var root = getTerminalNodes()[0]; getReverseTree_Pseudocode(root);
+            var root = e.node; 
+            var code = getReverseTree_Pseudocode(root);
+            console.log(code);
+            alert(code);
+        }
+        
         //'Click me'(){ console.log('Works for node!') },
         //'Delete': false, // don't show Delete item
         //'Clone': false // or Clone item
@@ -203,8 +211,39 @@ async function compile(store=false) {
     }
     await engine.process(json);
 }
-
+function getConnectionStates(node){
+    var connectionStates={connected:[],missing:[],total:0,required:node.inputConnectionsRequired};
+      
+      if(node.inputs instanceof Map){
+          connectionStates.total=node.inputs.size;
+          for(var inputkey of node.inputs.keys()){
+            console.log("key",inputkey)
+            var input = node.inputs.get(inputkey);
+            console.log("input",input)
+            console.log("input conn",input.connections.toString());
+            console.log("input connL",input.connections.length);
+            if(input.connections.length<1){
+                connectionStates.missing.push(inputkey);
+            }else{
+                connectionStates.connected.push(inputkey);
+            }
+          }
+      }else{
+        connectionStates.total=Object.keys(node.inputs).length;
+        for(var inputkey of Object.keys(node.inputs)){
+           var input = node.inputs[inputkey];
+            if(input.connections.length<1){
+                connectionStates.missing.push(inputkey);
+            }else{
+                connectionStates.connected.push(inputkey);
+            }
+        }
+      }
+      
+      return connectionStates;
+}
 function getMissingConnections(node){
+    return getConnectionStates(node).missing;
     var connectionsMissing=[];
       
       if(node.inputs instanceof Map){
