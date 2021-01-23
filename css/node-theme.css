@@ -99,3 +99,18 @@
     filter: contrast(75%);
     opacity:0.75;
 }
+
+.node-collapse-button{
+    display: inline-block;
+    width:1em;
+    margin-left:1em;
+    Xbackground-color: red;
+    text-align: center;
+}
+.node-collapse-button:before{
+    content:'\0021C5';
+}
+
+.elem-collapsed{
+    display: none;
+}

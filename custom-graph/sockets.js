@@ -6,6 +6,10 @@ var byteSocket = new Rete.Socket('Byte');
 
 
 //implicit conversion
+actionSocket.combineWith(booleanSocket);//onoff -> 01
+booleanSocket.combineWith(actionSocket);//01->onoff
+
+
 actionSocket.combineWith(stringSocket);
 byteSocket.combineWith(stringSocket);
 booleanSocket.combineWith(stringSocket);//bit to string

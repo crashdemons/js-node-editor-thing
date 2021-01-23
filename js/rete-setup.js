@@ -201,7 +201,7 @@ async function compile(store=false) {
     if(store){
         storage_setData(json);
     }
-    await engine.process(editor.toJSON());
+    await engine.process(json);
 }
 
 function getMissingConnections(node){
@@ -265,6 +265,11 @@ editor.on('connectioncreate connectionremove nodecreate noderemove', ()=>{
   compile(true);//RUNS EVERYTHING ON EACH UPDATE
 });
 
+editor.on('nodecreate', (node)=>{
+  console.log("nodecreate",node);
+  makeNodeCollapsibleDelayed(node);
+});
+
 
 editor.on('connectioncreate', (connectEvent)=>{
   console.log("creating connection",connectEvent)
@@ -299,12 +304,10 @@ editor.on('connectionremove', (connectEvent)=>{
   }
 });
 
-editor.on('nodecreate', (createNodeEvent)=>{
-  console.log("createnodeevent",createNodeEvent)
-});
+
 
 editor.on('nodetranslated', (nodeEvent)=>{
-  //console.log("nodetranslated",nodeEvent)
+  console.log("nodetranslated",nodeEvent)
    updateNodeEnabled(nodeEvent.node);
 });
 
