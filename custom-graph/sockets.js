@@ -17,5 +17,6 @@ integerSocket.combineWith(stringSocket);//int to string
 //
 //integerSocket.combineWith(byteSocket);//int to byte (WARNING: DATA LOSS!)
 byteSocket.combineWith(integerSocket);//byte to int (wider type)
+booleanSocket.combineWith(integerSocket);//bit to int (wider type)
 
 
